@@ -5,6 +5,7 @@ import pl.sdacademy.java.adv.school.domain.student.model.Student;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class StudentService {
@@ -43,16 +44,29 @@ public class StudentService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-  public Map<String, List<Student>> getStudentsGroupedByCityAndSortedByName() {
-
-    Map<String, List<Student>> groupedStudents =
-        studentRepository.findAllStudents().stream()
-            .sorted(Comparator.comparing(Student::getLastName).thenComparing(Student::getFirstName))
-            .collect(Collectors.groupingBy(Student::getCity));
-    return groupedStudents;
-  }
 
     public Map<String, Student> getStudentsMappedByIdentifier() {
         throw new UnsupportedOperationException();
     }
+
+    public Map<String, List<Student>> getStudentsGroupedByCityAndSortedByName() {
+
+        Map<String, List<Student>> groupStudents = studentRepository.findAllStudents()
+                .stream()
+                .sorted(Comparator.comparing(Student::getLastName)
+                        .thenComparing(Student::getFirstName))
+                .collect(Collectors.groupingBy(Student::getCity));
+
+        return groupStudents;
+
+
+    }
+
+    public Map<String, Student> getStudentMappedBgetStudentsMappedByIdentifieryIdentifier(){
+        return studentRepository.findAllStudents().stream()
+                .collect(Collectors.toMap(Student::getId, Function.identity()));
+    }
 }
+
+
+
